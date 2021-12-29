@@ -1,0 +1,119 @@
+// // 컴포넌트 등록을 먼저 선언해줘야 함
+// Vue.component('todo-item', {
+//     props: ['todo'],
+//     template: '<li>{{todo.text}}</li>'
+// });
+
+// var app = new Vue({
+//     el: '#app',
+//     data: {
+//         message: '안녕',
+//         time: new Date(),
+//         isVisible: true,
+//         todos: [
+//             {id: 0, text: '나는 킴슨이다'},
+//             {id: 1, text: '나도 킴슨이다'},
+//             {id: 2, text: '우리 모두 킴슨이다'},
+//         ]
+//     },
+//     methods: {
+//         reverseMessage: function(){
+//             this.message = this.message.split('').reverse().join('')
+//         }
+//     }
+// });
+
+// app.$watch('message', function(cur, old){
+//     console.log(cur, old);
+// })
+
+// app.todos.push({id:3, text: '나는 킴슨 아닌데?'});
+
+// var app2 = new Vue({
+//     el: '#app2',
+//     data: {
+//         array: [
+//             {text: '1번 <div>test</div>'},
+//             {text: '2번 <div>test</div>'},
+//             {text: '3번'},
+//             {text: 'title'},
+//         ],
+//         title: 'title'
+//     },
+//     methods: {
+//         reverse: function(){
+//             this.array = this.array.reverse();
+//         }
+//     }
+// })
+
+Vue.component('todo-list', {
+    props: ['item', 'list'],
+    methods:{
+        del: function(){
+            this.item.isVisible = false;
+        }
+    },
+    template: '<li ref="target">{{item.text}} <span @click="del">x</span></li>'
+});
+
+Vue.component('todo-input', {
+    props: ['list', 'idx','val'],
+    data: function(){
+        return {
+            focus: false
+        }
+    },
+    template: '<div>\
+    <input ref="input" type="text" :value="val" @input="detect" @focus="focusing" @blur="focusing">\
+    <button @click="add">추가</button>\
+    </div>',
+    created: function(){
+        console.log(this.val)
+    },
+    methods: {
+        add: function(){
+            this.list.push({
+                id: this.list.length,
+                text: this.$refs.input.value,
+                isVisible: true
+            });
+            this.$refs.input.value='';
+        },
+        detect: function(){
+            this.$emit('back', this.$refs.input)
+        },
+        focusing: function(ev){
+            this.focus = ev.type=='focus'?true:false;
+            this.$emit('focusing', this.focus);
+        }
+    },
+});
+
+var app = new Vue({
+    el: "#app",
+    data: {
+        title: 'Awesome Title',
+        todos: [
+            {id: 0, text: 'test message-1', isVisible: true},
+            {id: 1, text: 'test message-2', isVisible: false},
+            {id: 2, text: 'test message-3', isVisible: true},
+        ],
+        status: 'connected',
+        msg: 'qwe',
+    },
+    computed: {
+        detectStatus: function(){
+            return this.msg.length>0?'<span style="color: red;">writing...</span>':'ready';
+        }
+    },
+    methods: {
+        model: function(input){
+            this.msg = input.value;
+            this.status = this.detectStatus;
+        },
+        focusing: function(focus){
+            this.status = focus?'writing':'connected';
+        }
+    }
+});

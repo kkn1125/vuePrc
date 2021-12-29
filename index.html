@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="vue.js"></script>
+        <title>Vue Test</title>
+        <style>
+            .calc-w td{
+                width: 50px;
+                height: 50px;
+                text-align: center;
+            }
+            .centered *{
+                margin: auto;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div id="app">
+            <div v-on:click="reverseFullName">{{fullName}}</div>
+            <ol>
+                <!-- bind:todo 는 todo-item컴포넌트의 지정한 props명에 item을 바인드 하는 것을 말한다. -->
+                <todo-item
+                v-for="item in todos"
+                :todo="item"
+                :key="item.id"
+                ></todo-item>
+            </ol>
+        </div>
+
+        <div id="calculator" :style="calcStyle">
+            <div v-html="uppercasedTitle"></div>
+            <div :class="[calcStyle]">
+                <calculator
+                :parent-method="parentMethod"
+                :result="result"
+                style="user-select: none; border-collapse: collapse;">
+                </calculator>
+
+                <!-- <table style="user-select: none; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th colspan="4">
+                                <span style="width: 100%; display: inline-block; text-align: left; border: 1px solid black; padding: .5rem;">{{result}}</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody
+                    :class="[tdStyle]"
+                    @click="clickTd"
+                    >
+                        <tr>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>*</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>/</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>+</td>
+                        </tr>
+                        <tr>
+                            <td>=</td>
+                            <td>0</td>
+                            <td>.</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4">
+                               
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table> -->
+                
+            </div>
+        </div>
+
+        <!-- <div id="app">
+            <todo-list
+            :title="title"
+            v-for="todo in todos"
+            :list="todos"
+            :item="todo"
+            :key="todo.id"
+            v-if="todo.isVisible"
+            ></todo-list>
+            <todo-input v-model="msg"
+            :list="todos"
+            :val="msg"
+            @back="model"
+            @focusing="focusing"
+            ></todo-input>
+            current : <span v-html="status"></span>
+        </div> -->
+
+        <script src="main.js" type="module"></script>
+    </body>
+
+</html>
