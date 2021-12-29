@@ -1,5 +1,7 @@
 import {area} from './test.js';
 
+document.body.innerHTML = document.body.innerHTML.replace(/\<\!\-+\s?[\w\W]+?\s?\n?\-+\>/gim, '\n');
+
 let data = {
     todos: [
         {
@@ -194,10 +196,14 @@ let calc = new Vue({
                     if(value.match(/delete/gim)){
                         this.result = 0;
                     } else {
-                        value=='Backspace'?this.result = this.result.slice(0,this.result.length-1):
-                        value!='='&&value!='Enter'
-                        ?this.result += value
-                        :this.result = new Function(`return ${this.result}`)();
+                        if(this.result.toString().charAt(this.result.length-1)=='.'&&value.match(/[\*\/\+\-]/gm)){
+
+                        } else {
+                            value=='Backspace'?this.result = this.result.slice(0,this.result.length-1):
+                            value!='='&&value!='Enter'
+                            ?this.result += value
+                            :this.result = new Function(`return Number.isInteger(${this.result})?${this.result}:parseFloat(${this.result}).toFixed(5)`)();
+                        }
                     }
                 }
             }
