@@ -171,10 +171,6 @@ let calc = new Vue({
             const valid = ableKeys.filter(x=>value.match(new RegExp(value.match(/[A-z]/gm)?x:`[${x}]`, 'gim')));
 
             if(valid.length==0) return;
-
-            if(this.result==0){
-                this.result = '';
-            }
             
             if(value.match(/[\d\.\(\)\-\=\+\*\/]|enter|backspace|delete/gim)) {
                 if(value=='.'){
@@ -199,10 +195,17 @@ let calc = new Vue({
                         if(this.result.toString().charAt(this.result.length-1)=='.'&&value.match(/[\*\/\+\-]/gm)){
 
                         } else {
-                            value=='Backspace'?this.result = this.result.slice(0,this.result.length-1):
+                            if(this.result==0){
+                                this.result = '';
+                            }
+                            value=='Backspace'?this.result = this.result.toString().slice(0,this.result.length-1):
                             value!='='&&value!='Enter'
                             ?this.result += value
-                            :this.result = new Function(`return Number.isInteger(${this.result})?${this.result}:parseFloat(${this.result}).toFixed(5)`)();
+                            :this.result = new Function(`return ${this.result==''?0:`Number.isInteger(${this.result})?${this.result}:parseFloat(parseFloat(${this.result}).toFixed(5))`}`)();
+                            
+                            this.result.to
+
+                            if(this.result=='') this.result = 0;
                         }
                     }
                 }
